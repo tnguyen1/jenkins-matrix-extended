@@ -34,7 +34,7 @@ public class MultipleValueAxisTest {
         map.put("env.var", "%");
         axis.addBuildVariable("axeValue2", map);
 
-        assertEquals("%second%valueunknown2%", map.get("secondkey"));
+        assertEquals("%second%value${unknown}2%", map.get("secondkey"));
 
     }
 

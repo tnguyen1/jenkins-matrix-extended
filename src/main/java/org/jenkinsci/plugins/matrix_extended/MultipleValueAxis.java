@@ -60,14 +60,29 @@ public class MultipleValueAxis extends TextAxis {
     }
 
     private String replaceEnvVars(final String value, final Map<String, String> map) {
+        
+        // System.out.println("##### Replacing [" + value + "]");
+        // for (final Entry<String, String> entry : map.entrySet()) {
+        //    System.out.println(".......... " + entry.getKey() + "=" + entry.getValue());
+        // }
+        
         String replacedValue = value;
-        while (replacedValue.indexOf("${") >= 0) {
-            int start = replacedValue.indexOf("${");
+        int fromIndex = 0;
+        while (replacedValue.indexOf("${", fromIndex) >= 0) {
+            int start = replacedValue.indexOf("${", fromIndex);
             int end = replacedValue.indexOf("}", start);
             String envVar = replacedValue.substring(start + 2, end);
-            String replacement = map.get(envVar) == null ? envVar : map.get(envVar);
-            replacedValue = new StringBuilder(replacedValue).replace(start, end + 1, replacement).toString();
+            // System.out.println(">>>>> envVar [" + envVar + "]");
+            
+            String replacement = map.get(envVar);
+            if (replacement != null) {
+                replacedValue = new StringBuilder(replacedValue).replace(start, end + 1, replacement).toString();
+            }
+            fromIndex = start + 1;
         }
+        
+        // System.out.println(">>>>> replacedValue [" + replacedValue + "]");
+        
         return replacedValue;
     }
 
